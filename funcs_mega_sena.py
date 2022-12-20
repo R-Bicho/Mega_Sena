@@ -4,7 +4,7 @@ from random import randint
 winners: list[int] = []
 chosen_numbers: list[str] = []
 total_prize = 20
-right_choice: set[int] = set()
+rightness: set[int] = set()
 numbers_reg_exp = re.compile(r'^[1-60]$')
 
 
@@ -38,3 +38,53 @@ def validate_int(value):
         value = int(value)
     else:
         print('You need write only values!')
+
+
+def value_game():
+    '''Price for each game'''
+
+    prices = {'6': '4,50', '7': '31.50', '8': '126,00', '9': '378,00',
+              '10': '945,00', '11': '2.079,00', '12': '4.158,00',
+              '13': '7.722,00', '14': '13.513,50', '15': '22.522,50'}
+    return prices
+
+
+def winning(rightness):
+    '''Award for rightness'''
+
+    six_acerts = total_prize * 0.35
+    five_acerts = total_prize * 0.19
+    four_acerts = total_prize * 0.19
+
+    if len(rightness) <= 3:
+        return 'No one winning'
+
+    if len(rightness) == 4:
+        return f'You winnig: R${four_acerts:.2f}'
+
+    if len(rightness) == 5:
+        return f'You winnig: R${five_acerts:.2f}'
+
+    if len(rightness) == 6:
+        return f'You winnig: R${six_acerts:.2f}'
+
+
+def total_rightness():
+    '''writes to the user total hits'''
+
+    for gamble in chosen_numbers:
+        gamble = int(gamble)
+        if gamble in winners:
+            rightness.add(gamble)
+
+    if len(rightness) <= 3:
+        return f'You hit {len(rightness)} numbers'
+
+    if len(rightness) == 4:
+        return 'You hit 4 numbers'
+
+    if len(rightness) == 5:
+        return 'You hit 5 numbers'
+
+    if len(rightness) == 6:
+        return 'You hit 6 numbers'
