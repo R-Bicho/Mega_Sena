@@ -5,7 +5,7 @@ winners: list[int] = []
 chosen_numbers: list[str] = []
 total_prize = 20
 rightness: set[int] = set()
-numbers_reg_exp = re.compile(r'^[1-60]$')
+numbers_reg_exp = re.compile(r'^\b([1-9]|[1-5][0-9]|60)\b$')
 
 
 def winning_numbers() -> None:
@@ -25,6 +25,7 @@ def choose_one_number(number: int):
     not_duplicate: set[str] = set()
     while len(not_duplicate) != number:
         decision = input('Choose one number: ')
+        validate_int(decision)
         not_duplicate.add(decision)
 
     for value in not_duplicate:
@@ -35,12 +36,12 @@ def validate_int(value):
     '''validates if the number is integer'''
 
     if numbers_reg_exp.match(value):
-        value = int(value)
+        return int(value)
     else:
-        print('You need write only values!')
+        raise ValueError('Invalid Number!')
 
 
-def value_game():
+def value_game() -> dict:
     '''Price for each game'''
 
     prices = {'6': '4,50', '7': '31.50', '8': '126,00', '9': '378,00',
@@ -49,7 +50,7 @@ def value_game():
     return prices
 
 
-def winning(rightness):
+def winning():
     '''Award for rightness'''
 
     six_acerts = total_prize * 0.35
@@ -57,7 +58,7 @@ def winning(rightness):
     four_acerts = total_prize * 0.19
 
     if len(rightness) <= 3:
-        return 'No one winning'
+        return 'You lose'
 
     if len(rightness) == 4:
         return f'You winnig: R${four_acerts:.2f}'
